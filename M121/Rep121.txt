@@ -1,0 +1,22 @@
+Zahlensysteme
+	-Binär		Basis: 2 / Bereich: 0,1 / Informationsgehalt: 2^1 (1= Stelle)
+	-Oktal		Basis: 8 / Bereich: 0..7 / Informationsgehalt: 8^1 (1= Stelle)
+	-Hexadezimal	Basis: 16 / Bereich: 0..9,A..F / Informationsgehalt: 16^1 (1= Stelle)
+	-Dezimal	Basis: 10 / Bereich: 0..9 / Informationsgehalt: 10^1 (1= Stelle)
+
+Bsp. 1011011 Binär zu Oktal
+	001 011 011
+	 1   3   3 => Oktal 133
+
+	Zu Hexa
+	0101 1011
+	  5  11=B => 5B
+
+Wertigkeit
+1110110
+berechnet anhand von Basis und Stellen
+
+Zahlenkreis
+
+Vorzeichen
+ 

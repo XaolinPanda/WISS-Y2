@@ -1,0 +1,140 @@
+<!DOCTYPE aesl-source>
+<network>
+<node nodeId="1" name="thymio-II"># variables for state
+var state[4] = [0,0,0,0]
+var new_state[4] = [0,0,0,0]
+
+# reset outputs
+call sound.system(-1)
+call leds.top(0,0,0)
+call leds.bottom.left(0,0,0)
+call leds.bottom.right(0,0,0)
+call leds.circle(0,0,0,0,0,0,0,0)
+
+# subroutine to display the current state
+sub display_state
+	call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)
+
+onevent prox
+	when prox.horizontal[2] >= 2000 and prox.horizontal[5] >= 2000 and prox.horizontal[6] >= 2000 do
+		call leds.top(32,0,0)
+		call leds.bottom.left(32,0,0)
+		call leds.bottom.right(32,0,0)
+		emit pair_run 0
+	end
+
+	when prox.horizontal[2] >= 2000 and prox.horizontal[5] >= 2000 and prox.horizontal[6] &lt;= 1000 do
+		call leds.top(32,32,0)
+		call leds.bottom.left(32,32,0)
+		call leds.bottom.right(32,32,0)
+		emit pair_run 1
+	end
+
+	when prox.horizontal[2] &lt;= 1000 and prox.horizontal[5] >= 2000 and prox.horizontal[6] >= 2000 do
+		call leds.top(32,32,0)
+		call leds.bottom.left(32,29,0)
+		call leds.bottom.right(32,29,0)
+		emit pair_run 2
+	end
+
+	when prox.horizontal[2] >= 2000 and prox.horizontal[5] &lt;= 1000 and prox.horizontal[6] >= 2000 do
+		call leds.top(32,32,0)
+		call leds.bottom.left(32,32,0)
+		call leds.bottom.right(32,32,0)
+		emit pair_run 3
+	end
+
+	when prox.horizontal[2] &lt;= 1000 and prox.horizontal[5] &lt;= 1000 and prox.horizontal[6] &lt;= 1000 do
+		call leds.top(0,32,0)
+		call leds.bottom.left(0,32,0)
+		call leds.bottom.right(0,32,0)
+		emit pair_run 4
+	end
+
+	when prox.horizontal[2] >= 2000 and prox.horizontal[5] &lt;= 1000 and prox.horizontal[6] &lt;= 1000 do
+		call leds.top(0,32,0)
+		call leds.bottom.left(0,32,0)
+		call leds.bottom.right(0,32,0)
+		emit pair_run 5
+	end
+
+	when prox.horizontal[2] &lt;= 1000 and prox.horizontal[5] >= 2000 and prox.horizontal[6] &lt;= 1000 do
+		call leds.top(0,32,0)
+		call leds.bottom.left(0,32,0)
+		call leds.bottom.right(0,32,0)
+		emit pair_run 6
+	end
+
+	when prox.horizontal[2] &lt;= 1000 and prox.horizontal[5] &lt;= 1000 and prox.horizontal[6] >= 2000 do
+		call leds.top(0,32,0)
+		call leds.bottom.left(0,32,0)
+		call leds.bottom.right(0,32,0)
+		emit pair_run 7
+	end
+
+<toolsPlugins>
+<ThymioVisualProgramming>
+<vplroot xml-format-version="1">
+<program advanced_mode="1">
+<set>
+<block value0="0" value1="0" value2="1" value3="0" value4="0" value5="1" value6="1" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="32" value1="0" value2="0" type="action" name="colortop"/>
+<block value0="32" value1="0" value2="0" type="action" name="colorbottom"/>
+<block value0="0" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="1" value3="0" value4="0" value5="1" value6="2" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="32" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="32" value1="32" value2="0" type="action" name="colorbottom"/>
+<block value0="0" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="2" value3="0" value4="0" value5="1" value6="1" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="32" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="32" value1="29" value2="0" type="action" name="colorbottom"/>
+<block value0="0" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="1" value3="0" value4="0" value5="2" value6="1" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="32" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="32" value1="32" value2="0" type="action" name="colorbottom"/>
+<block value0="0" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="2" value3="0" value4="0" value5="2" value6="2" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="0" value1="32" value2="0" type="action" name="colorbottom"/>
+<block value0="0" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="1" value3="0" value4="0" value5="2" value6="2" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="0" value1="32" value2="0" type="action" name="colorbottom"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="2" value3="0" value4="0" value5="1" value6="2" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="0" value1="32" value2="0" type="action" name="colorbottom"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="2" value3="0" value4="0" value5="2" value6="1" value7="1000" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="0" value1="32" value2="0" type="action" name="colorbottom"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+</set>
+</program>
+</vplroot>
+</ThymioVisualProgramming>
+</toolsPlugins>
+</node>
+</network>

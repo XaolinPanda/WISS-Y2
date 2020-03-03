@@ -1,0 +1,151 @@
+<!DOCTYPE aesl-source>
+<network>
+<node nodeId="1" name="thymio-II"># variables for state
+var state[4] = [0,0,0,0]
+var new_state[4] = [0,0,0,0]
+
+# reset outputs
+call sound.system(-1)
+call leds.top(0,0,0)
+call leds.bottom.left(0,0,0)
+call leds.bottom.right(0,0,0)
+call leds.circle(0,0,0,0,0,0,0,0)
+
+# subroutine to display the current state
+sub display_state
+	call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)
+
+onevent prox
+	when prox.ground.delta[0] >= 450 and prox.ground.delta[1] >= 450 do
+		motor.left.target = 450
+		motor.right.target = 500
+		call leds.top(0,32,0)
+		new_state[1] = 1
+		emit pair_run 0
+	end
+
+	when prox.ground.delta[0] &lt;= 400 and prox.ground.delta[1] &lt;= 400 do
+		if state[1] == 1 then
+			motor.left.target = -500
+			motor.right.target = 500
+			call leds.top(0,0,0)
+			call leds.bottom.left(32,0,0)
+			call leds.bottom.right(32,0,0)
+			new_state[0] = 1
+			emit pair_run 1
+		end
+	end
+
+	when prox.ground.delta[0] >= 450 and prox.ground.delta[1] >= 450 do
+		if state[0] == 1 then
+			motor.left.target = 450
+			motor.right.target = 350
+			call leds.top(0,32,0)
+			new_state[0] = 0
+			new_state[1] = 1
+			emit pair_run 2
+		end
+	end
+
+	when prox.horizontal[1] >= 700 and prox.horizontal[2] >= 700 do
+		if state[1] == 1 then
+			motor.left.target = 0
+			motor.right.target = -500
+			new_state[0] = 1
+			new_state[1] = 0
+			emit pair_run 3
+		end
+	end
+
+	when prox.horizontal[1] &lt;= 1400 and prox.horizontal[2] &lt;= 1400 do
+		if state[0] == 1 then
+			motor.left.target = 450
+			motor.right.target = 500
+			new_state[0] = 0
+			new_state[2] = 1
+			emit pair_run 4
+		end
+	end
+
+	when prox.horizontal[2] >= 700 and prox.horizontal[3] >= 700 do
+		if state[2] == 1 then
+			motor.left.target = -500
+			motor.right.target = 0
+			new_state[2] = 0
+			new_state[3] = 1
+			emit pair_run 5
+		end
+	end
+
+	when prox.horizontal[2] &lt;= 1600 and prox.horizontal[3] &lt;= 1600 do
+		if state[3] == 1 then
+			motor.left.target = 450
+			motor.right.target = 500
+			new_state[0] = 1
+			new_state[3] = 0
+			emit pair_run 6
+		end
+	end
+
+	call math.copy(state, new_state)
+	callsub display_state
+
+<toolsPlugins>
+<ThymioVisualProgramming>
+<vplroot xml-format-version="1">
+<program advanced_mode="1">
+<set>
+<block value0="1" value1="1" value2="400" value3="450" type="event" name="proxground"/>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="450" value1="500" type="action" name="move"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="0" value1="1" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="2" value1="2" value2="400" value3="450" type="event" name="proxground"/>
+<block value0="0" value1="1" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="-500" value1="500" type="action" name="move"/>
+<block value0="0" value1="0" value2="0" type="action" name="colortop"/>
+<block value0="32" value1="0" value2="0" type="action" name="colorbottom"/>
+<block value0="1" value1="0" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="1" value1="1" value2="400" value3="450" type="event" name="proxground"/>
+<block value0="1" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="450" value1="350" type="action" name="move"/>
+<block value0="0" value1="32" value2="0" type="action" name="colortop"/>
+<block value0="2" value1="1" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="1" value2="1" value3="0" value4="0" value5="0" value6="0" value7="700" type="event" value8="700" name="prox"/>
+<block value0="0" value1="1" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="0" value1="-500" type="action" name="move"/>
+<block value0="1" value1="2" value2="0" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="2" value2="2" value3="0" value4="0" value5="0" value6="0" value7="1400" type="event" value8="2000" name="prox"/>
+<block value0="1" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+<block value0="450" value1="500" type="action" name="move"/>
+<block value0="2" value1="0" value2="1" value3="0" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="1" value3="1" value4="0" value5="0" value6="0" value7="700" type="event" value8="700" name="prox"/>
+<block value0="0" value1="0" value2="1" value3="0" type="state" name="statefilter"/>
+<block value0="-500" value1="0" type="action" name="move"/>
+<block value0="0" value1="0" value2="2" value3="1" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="2" value3="2" value4="0" value5="0" value6="0" value7="1600" type="event" value8="2000" name="prox"/>
+<block value0="0" value1="0" value2="0" value3="1" type="state" name="statefilter"/>
+<block value0="450" value1="500" type="action" name="move"/>
+<block value0="1" value1="0" value2="0" value3="2" type="action" name="setstate"/>
+</set>
+<set>
+<block value0="0" value1="0" value2="0" value3="0" type="state" name="statefilter"/>
+</set>
+</program>
+</vplroot>
+</ThymioVisualProgramming>
+</toolsPlugins>
+</node>
+</network>
